@@ -1,3 +1,4 @@
-﻿  Scene.cpp
-C:\Users\vilif\source\repos\GameEngine\Scene.cpp(28,13): warning C4244: 'argument': conversion from 'float' to 'Uint32', possible loss of data
+﻿  EngineCore.cpp
+  Scene.cpp
+  Generating Code...
   GameEngine.vcxproj -> C:\Users\vilif\source\repos\GameEngine\Debug\GameEngine.exe

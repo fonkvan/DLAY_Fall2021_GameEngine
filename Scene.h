@@ -1,4 +1,5 @@
 #pragma once
+#include <chrono>
 #include <vector>
 #include "SDL.h"
 #include "Vec2D.h"
@@ -16,10 +17,15 @@ class Scene
 		const Uint8* Keyboard;
 		Uint32 MouseButton;
 		Vec2D MousePos;
+		std::chrono::system_clock::time_point CurrentTime;
+		std::chrono::system_clock::time_point LastTime;
+		std::chrono::duration<double> DeltaTime;
+		double RefreshSeconds;
 	public:
 		Scene();
 		void Start();
 		void End();
+		void Tick();
 		void Pause();
 		void Clear();
 		void HideCursor();
