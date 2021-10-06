@@ -33,5 +33,7 @@ class Scene
 		Vec2D GetMousePos();
 		void Hide();
 		void Show();
+		void EventHandler(SDL_Event Event, bool* bPlay, bool* bPaused);
+		void PausedEventHandler(SDL_Event Event, bool* bPlay, bool* bPaused);
 };
 

@@ -2,6 +2,9 @@
 #include "Scene.h"
 #include "Sprite.h"
 
+//macro OUT does nothing but explicitly states that something marked as OUT is an out parameter, ie. it could be changed in the function it's being passed to
+#define OUT
+
 Scene::Scene()
 {
 	Window = nullptr;
@@ -57,87 +60,28 @@ void Scene::Tick()
 	{
 		CurrentTime = std::chrono::system_clock::now();
 		DeltaTime = CurrentTime - LastTime;
-		if (DeltaTime.count() >= RefreshSeconds)
+		if (DeltaTime.count() < RefreshSeconds)
 		{
-			//std::cout << DeltaTime.count() << std::endl;
-			LastTime = CurrentTime;
-			if (!bPaused)
+			continue; //only used here to clean up code and help alleviate several layers of nesting
+		}
+		LastTime = CurrentTime;
+		if (!bPaused)
+		{
+			for (Sprite* s : Sprites)
 			{
-				for (Sprite* s : Sprites)
-				{
-					s->Update();
-				}
-				Keyboard = SDL_GetKeyboardState(NULL);
+				s->Update();
+			}
+			Keyboard = SDL_GetKeyboardState(NULL);
 
-				while (SDL_PollEvent(&Event))
-				{
-					if (Event.type == SDL_KEYDOWN)
-					{
-						if (Event.key.keysym.sym == SDLK_p)
-						{
-							bPaused = true;
-							std::cout << "P pressed. Pausing..." << std::endl;
-							Pause();
-						}
-						if (Event.key.keysym.sym == SDLK_c)
-						{
-							std::cout << "Clearing renderer" << std::endl;
-							Clear();
-						}
-						if (Event.key.keysym.sym == SDLK_q || Event.key.keysym.sym == SDLK_ESCAPE)
-						{
-							bPlay = false;
-							std::cout << "Quit button pressed. Quitting engine." << std::endl;
-						}
-						if (Event.key.keysym.sym == SDLK_t)
-						{
-							std::cout << "T pressed. Changing mouse visibility" << std::endl;
-							int MouseVisibility = SDL_ShowCursor(SDL_QUERY);
-							if (MouseVisibility)
-							{
-								HideCursor();
-							}
-							else
-							{
-								ShowCursor();
-							}
-						}
-						if (Event.key.keysym.sym == SDLK_h)
-						{
-							std::cout << "Changing window visibility" << std::endl;
-							if (bWindowVisible)
-							{
-								bWindowVisible = false;
-								Hide();
-							}
-							else
-							{
-								bWindowVisible = true;
-								Show();
-							}
-							
-						}
-					}
-				}
-				SDL_RenderPresent(Renderer);
-			}
-			else
+			while (SDL_PollEvent(&Event))
 			{
-				SDL_PollEvent(&Event);
-				if (Event.type == SDL_KEYDOWN)
-				{
-					if (Event.key.keysym.sym == SDLK_p)
-					{
-						bPaused = false;
-						std::cout << "P pressed. Unpausing..." << std::endl;
-					}
-				}
-				if (Event.key.keysym.sym == SDLK_q || Event.key.keysym.sym == SDLK_ESCAPE)
-				{
-					bPlay = false;
-					std::cout << "Quit button pressed. Quitting engine." << std::endl;
-				}
+				EventHandler(Event, OUT &bPlay, OUT &bPaused); // this function was also created to help alleviate 
 			}
+			SDL_RenderPresent(Renderer);
+		}
+		else
+		{
+			PausedEventHandler(Event, OUT &bPlay, OUT &bPaused);
 		}
 	}
 	return;
@@ -166,7 +110,7 @@ void Scene::ShowCursor()
 Vec2D Scene::GetMousePos()
 {
 	int x, y; // Out parameters
-	MouseButton = SDL_GetMouseState(&x, &y);
+	MouseButton = SDL_GetMouseState(OUT &x, OUT &y);
 	MousePos.x = x;
 	MousePos.y = y;
 	return MousePos;
@@ -180,4 +124,73 @@ void Scene::Hide()
 void Scene::Show()
 {
 	SDL_ShowWindow(Window);
+}
+
+void Scene::EventHandler(SDL_Event Event, bool* bPlay, bool* bPaused)
+{
+	bool bWindowVisible = true;
+	if (Event.type == SDL_KEYDOWN)
+	{
+		if (Event.key.keysym.sym == SDLK_p)
+		{
+			*bPaused = true;
+			std::cout << "P pressed. Pausing..." << std::endl;
+			Pause();
+		}
+		if (Event.key.keysym.sym == SDLK_c)
+		{
+			std::cout << "Clearing renderer" << std::endl;
+			Clear();
+		}
+		if (Event.key.keysym.sym == SDLK_q || Event.key.keysym.sym == SDLK_ESCAPE)
+		{
+			*bPlay = false;
+			std::cout << "Quit button pressed. Quitting engine." << std::endl;
+		}
+		if (Event.key.keysym.sym == SDLK_t)
+		{
+			std::cout << "T pressed. Changing mouse visibility" << std::endl;
+			int MouseVisibility = SDL_ShowCursor(SDL_QUERY);
+			if (MouseVisibility)
+			{
+				HideCursor();
+			}
+			else
+			{
+				ShowCursor();
+			}
+		}
+		if (Event.key.keysym.sym == SDLK_h)
+		{
+			std::cout << "Changing window visibility" << std::endl;
+			if (bWindowVisible)
+			{
+				bWindowVisible = false;
+				Hide();
+			}
+			else
+			{
+				bWindowVisible = true;
+				Show();
+			}
+		}
+	}
+}
+
+void Scene::PausedEventHandler(SDL_Event Event, bool* bPlay, bool* bPaused)
+{
+	SDL_PollEvent(&Event);
+	if (Event.type == SDL_KEYDOWN)
+	{
+		if (Event.key.keysym.sym == SDLK_p)
+		{
+			*bPaused = false;
+			std::cout << "P pressed. Unpausing..." << std::endl;
+		}
+		if (Event.key.keysym.sym == SDLK_q || Event.key.keysym.sym == SDLK_ESCAPE)
+		{
+			*bPlay = false;
+			std::cout << "Quit button pressed. Quitting engine." << std::endl;
+		}
+	}
 }
