@@ -75,13 +75,13 @@ void Scene::Tick()
 
 			while (SDL_PollEvent(&Event))
 			{
-				EventHandler(Event, OUT &bPlay, OUT &bPaused); // this function was also created to help alleviate 
+				EventHandler(Event, OUT bPlay, OUT bPaused); // this function was also created to help alleviate 
 			}
 			SDL_RenderPresent(Renderer);
 		}
 		else
 		{
-			PausedEventHandler(Event, OUT &bPlay, OUT &bPaused);
+			PausedEventHandler(Event, OUT bPlay, OUT bPaused); // this function was also created to help alleviate 
 		}
 	}
 	return;
@@ -126,14 +126,14 @@ void Scene::Show()
 	SDL_ShowWindow(Window);
 }
 
-void Scene::EventHandler(SDL_Event Event, bool* bPlay, bool* bPaused)
+void Scene::EventHandler(SDL_Event Event, bool& bPlay, bool& bPaused)
 {
 	bool bWindowVisible = true;
 	if (Event.type == SDL_KEYDOWN)
 	{
 		if (Event.key.keysym.sym == SDLK_p)
 		{
-			*bPaused = true;
+			bPaused = true;
 			std::cout << "P pressed. Pausing..." << std::endl;
 			Pause();
 		}
@@ -144,7 +144,7 @@ void Scene::EventHandler(SDL_Event Event, bool* bPlay, bool* bPaused)
 		}
 		if (Event.key.keysym.sym == SDLK_q || Event.key.keysym.sym == SDLK_ESCAPE)
 		{
-			*bPlay = false;
+			bPlay = false;
 			std::cout << "Quit button pressed. Quitting engine." << std::endl;
 		}
 		if (Event.key.keysym.sym == SDLK_t)
@@ -177,19 +177,19 @@ void Scene::EventHandler(SDL_Event Event, bool* bPlay, bool* bPaused)
 	}
 }
 
-void Scene::PausedEventHandler(SDL_Event Event, bool* bPlay, bool* bPaused)
+void Scene::PausedEventHandler(SDL_Event Event, bool& bPlay, bool& bPaused)
 {
 	SDL_PollEvent(&Event);
 	if (Event.type == SDL_KEYDOWN)
 	{
 		if (Event.key.keysym.sym == SDLK_p)
 		{
-			*bPaused = false;
+			bPaused = false;
 			std::cout << "P pressed. Unpausing..." << std::endl;
 		}
 		if (Event.key.keysym.sym == SDLK_q || Event.key.keysym.sym == SDLK_ESCAPE)
 		{
-			*bPlay = false;
+			bPlay = false;
 			std::cout << "Quit button pressed. Quitting engine." << std::endl;
 		}
 	}
