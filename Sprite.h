@@ -11,14 +11,15 @@ class Sprite
 		SDL_Surface* Image;
 		Vec2D Size;
 		Vec2D Position;
-		float ImageAngle;
-		float MoveAngle; //MoveAngle and Speed used to calculate dx,dy
-		float Speed;
+		double ImageAngle;
+		double MoveAngle; //MoveAngle and Speed used to calculate dx,dy
+		double Speed;
 		Vec2D Velocity; //dx, dy
 		Vec2D Acceleration; //ddx, ddy
 		Scene* Scene;
 		Uint8* BoundAction;
-		void VectorProjection();
+		void VectorProjection(double Speed);
+		double ConvertToRadians(double Degrees);
 	public:
 		Sprite();
 		void SetImage(std::string ImageName);
@@ -26,14 +27,14 @@ class Sprite
 		virtual void Update();
 		void Hide();
 		void Show();
-		void SetSpeed(float Speed);
-		void SetImageAngle(float Degrees);
-		void SetMoveAngle(float Degrees);
-		void AddForce();
+		void SetSpeed(double Speed);
+		void SetImageAngle(double Degrees);
+		void SetMoveAngle(double Degrees);
+		void AddForce(double Force);
 		void SetBoundAction();
 		void CheckBounds();
-		bool CollidesWith(Sprite* Sprite);
-		void DistanceTo(Sprite* Sprite);
-		void AngleTo(Sprite* Sprite);
+		bool CollidesWith(Sprite* OtherSprite);
+		double DistanceTo(Sprite* OtherSprite);
+		double AngleTo(Sprite* OtherSprite);
 };
 

@@ -24,7 +24,7 @@ Scene::Scene()
 void Scene::Start()
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
-	Window = SDL_CreateWindow("Engine Window (Default)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Size.x, Size.y, SDL_WINDOW_RESIZABLE);
+	Window = SDL_CreateWindow("Engine Window (Default)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, (int)Size.x, (int)Size.y, SDL_WINDOW_RESIZABLE);
 	Renderer = SDL_CreateRenderer(Window, -1, SDL_RENDERER_ACCELERATED);
 	HideCursor();
 	if (Window == nullptr)
@@ -51,6 +51,7 @@ void Scene::Tick()
 {
 	bool bPlay = true;
 	bool bPaused = false;
+	bool bWindowVisible = true;
 	SDL_Event Event;
 	while (bPlay)
 	{
@@ -78,6 +79,11 @@ void Scene::Tick()
 							std::cout << "P pressed. Pausing..." << std::endl;
 							Pause();
 						}
+						if (Event.key.keysym.sym == SDLK_c)
+						{
+							std::cout << "Clearing renderer" << std::endl;
+							Clear();
+						}
 						if (Event.key.keysym.sym == SDLK_q || Event.key.keysym.sym == SDLK_ESCAPE)
 						{
 							bPlay = false;
@@ -95,6 +101,21 @@ void Scene::Tick()
 							{
 								ShowCursor();
 							}
+						}
+						if (Event.key.keysym.sym == SDLK_h)
+						{
+							std::cout << "Changing window visibility" << std::endl;
+							if (bWindowVisible)
+							{
+								bWindowVisible = false;
+								Hide();
+							}
+							else
+							{
+								bWindowVisible = true;
+								Show();
+							}
+							
 						}
 					}
 				}
@@ -153,10 +174,10 @@ Vec2D Scene::GetMousePos()
 
 void Scene::Hide()
 {
-
+	SDL_HideWindow(Window);
 }
 
 void Scene::Show()
 {
-
+	SDL_ShowWindow(Window);
 }
