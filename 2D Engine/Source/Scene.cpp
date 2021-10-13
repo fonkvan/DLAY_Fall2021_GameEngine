@@ -2,7 +2,8 @@
 #include "Scene.h"
 #include "Sprite.h"
 
-//macro OUT does nothing but explicitly states that something marked as OUT is an out parameter, ie. it could be changed in the function it's being passed to
+//macro OUT does nothing but explicitly states that something marked as OUT is an out parameter
+//ie. it could be changed in the function it's being passed to
 #define OUT
 
 Scene::Scene()
@@ -24,7 +25,7 @@ Scene::Scene()
 	RefreshSeconds = 1.00 / Framerate;
 }
 
-void Scene::Start()
+void Scene::Start(std::vector<Sprite*> Sprites, std::vector<std::string> ImagePaths, std::vector<Vec2D> InitialPositions)
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	Window = SDL_CreateWindow("Engine Window (Default)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, (int)Size.x, (int)Size.y, SDL_WINDOW_RESIZABLE);
@@ -40,6 +41,8 @@ void Scene::Start()
 		std::cout << "There was an error initializing the Renderer. " << SDL_GetError() << std::endl;
 		End();
 	}
+	this->Sprites = Sprites;
+	InitSprites(ImagePaths, InitialPositions);
 	Tick();
 	End();
 }
@@ -67,9 +70,22 @@ void Scene::Tick()
 		LastTime = CurrentTime;
 		if (!bPaused)
 		{
-			for (Sprite* s : Sprites)
-			{
-				s->Update();
+			for (int i = 0; i < Sprites.size()-1; ++i)
+			{	
+				/*std::cout << "Vertices of 1st:" << std::endl;
+				for (int j = 0; j < Sprites[i]->vertices.size(); ++j)
+				{
+					std::cout << "(" << Sprites[i]->vertices[j].x << ", " << Sprites[i]->vertices[j].y << ")" << std::endl;
+				}*/
+				Sprites[i]->Update();
+				if (Sprites[i]->CollidesWith(Sprites[i+1]))
+				{
+					std::cout << "Two things collided!" << std::endl;
+				}
+				else
+				{
+					std::cout << "No collision" << std::endl;
+				}
 			}
 			Keyboard = SDL_GetKeyboardState(NULL);
 
@@ -192,5 +208,15 @@ void Scene::PausedEventHandler(SDL_Event Event, bool& bPlay, bool& bPaused)
 			bPlay = false;
 			std::cout << "Quit button pressed. Quitting engine." << std::endl;
 		}
+	}
+}
+
+void Scene::InitSprites(std::vector<std::string> ImagePaths, std::vector<Vec2D> InitialPositions)
+{
+	for (int i = 0; i < Sprites.size(); ++i)
+	{
+		Sprites[i]->Scene = this;
+		Sprites[i]->SetImage(Renderer, ImagePaths[i], InitialPositions[i]);
+		Sprites[i]->Draw(Renderer);
 	}
 }

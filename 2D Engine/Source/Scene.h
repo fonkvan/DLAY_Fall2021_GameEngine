@@ -1,5 +1,6 @@
 #pragma once
 #include <chrono>
+#include <string>
 #include <vector>
 #include "SDL.h"
 #include "Vec2D.h"
@@ -9,9 +10,8 @@ class Scene
 {
 	private:
 		SDL_Window* Window;
-		SDL_Renderer* Renderer;
+		SDL_Renderer* Renderer = nullptr;
 		Vec2D Size;
-		//Vec2D Position;
 		std::vector<Sprite*> Sprites;
 		int Framerate;
 		const Uint8* Keyboard;
@@ -23,7 +23,7 @@ class Scene
 		double RefreshSeconds;
 	public:
 		Scene();
-		void Start();
+		void Start(std::vector<Sprite*> Sprites, std::vector<std::string> ImagePaths, std::vector<Vec2D> InitialPositions);
 		void End();
 		void Tick();
 		void Pause();
@@ -35,5 +35,5 @@ class Scene
 		void Show();
 		void EventHandler(SDL_Event Event, bool& bPlay, bool& bPaused);
 		void PausedEventHandler(SDL_Event Event, bool& bPlay, bool& bPaused);
+		void InitSprites(std::vector<std::string> ImagePaths, std::vector<Vec2D> InitialPositions);
 };
-
