@@ -199,6 +199,9 @@ Init values first.
 Find scalar offset, then check if there is a gap
 If there is a gap, we can move stop checking for collisions, as there is no collision possible
 If no gap, continue checking other normals. Must check normals on BOTH polygons
+I chose this method because it actually works for ANY CONVEX polygon (square, rect, triangle, can make work with circle, etc.)
+Unfortunately due to the way I am currently calculating the vertices, squares are the only collidable shapes
+However if I could figure a way to get all vertices of a general shape, then this would work for any convex shape
 */
 bool Sprite::SeparateAxisTheorem(std::stack<Vec2D> Normals, Sprite* OtherSprite)
 {
