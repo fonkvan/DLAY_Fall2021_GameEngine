@@ -18,6 +18,7 @@ Sprite::Sprite()
 	Acceleration.y = 0;
 	Scene = nullptr;
 	BoundAction = 0;
+	bCollisionEnabled = true;
 }
 
 void Sprite::VectorProjection(double Speed)
@@ -45,8 +46,10 @@ SDL_Texture* Sprite::SetImage(SDL_Renderer* renderer, std::string ImagePath, Vec
 		SDL_QueryTexture(Image, NULL, NULL, &w, &h);
 		texture.x = InitPosition.x;
 		texture.y = InitPosition.y;
-		texture.w = 0.2*w;
-		texture.h = 0.2*h;
+		Position.x = texture.x;
+		Position.y = texture.y;
+		texture.w = 1.0*w;
+		texture.h = 1.0*h;
 		SetVertices();
 		return Image;
 	}
@@ -58,7 +61,9 @@ void Sprite::Draw(SDL_Renderer* renderer)
 	SDL_RenderPresent(renderer);
 }
 
-void Sprite::Update(){}
+void Sprite::Update(){ return; }
+void Sprite::PlayerInput(SDL_Event Event){ return; }
+void Sprite::DefaultBehavior(){ return; }
 
 void Sprite::Hide()
 {
@@ -144,6 +149,11 @@ double Sprite::ConvertToRadians(double Degrees)
 	return Degrees * M_PI / 180.00;
 }
 
+double Sprite::ConvertToDegrees(double Radians)
+{
+	return Radians * 180.00 / M_PI;
+}
+
 void Sprite::SetVertices()
 {
 	Vec2D vert1{(double)texture.x, (double)texture.y};
@@ -170,6 +180,7 @@ void Sprite::MoveSprite()
 		vert.x += Velocity.x;
 		vert.y += Velocity.y;
 	}
+	std::cout << "(" << Position.x << ", " << Position.y << ")" << std::endl;
 }
 
 //Returns the normalized normal vectors of an 'edge' (line seg between 2 pts) of a sprite 
@@ -236,4 +247,9 @@ bool Sprite::SeparateAxisTheorem(std::stack<Vec2D> Normals, Sprite* OtherSprite)
 		Normals.pop();
 	}
 	return true;
+}
+
+void Sprite::SetPlayerStatus(bool IsPlayer)
+{
+	bPlayer = IsPlayer;
 }

@@ -1,4 +1,6 @@
 #include <iostream>
+#include <functional>
+#include <thread>
 #include "Scene.h"
 #include "Sprite.h"
 
@@ -12,10 +14,7 @@ Scene::Scene()
 	Renderer = nullptr;
 	Size.x = 700;
 	Size.y = 700;
-	//Position.x = 0;
-	//Position.y = 0;
 	Framerate = 60;
-	Keyboard = 0;
 	MouseButton = 0;
 	CurrentTime = std::chrono::system_clock::now();
 	LastTime = CurrentTime;
@@ -43,6 +42,16 @@ void Scene::Start(std::vector<Sprite*> Sprites, std::vector<std::string> ImagePa
 	}
 	this->Sprites = Sprites;
 	InitSprites(ImagePaths, InitialPositions);
+	if (PCount == 0)
+	{
+		std::cout << "No Sprite is instantiated to be a player. Call Sprite::SetPlayerStatus(bool IsPlayer) and pass true on Sprite you want to control." << std::endl;
+		End();
+	}
+	if (PCount > 1)
+	{
+		std::cout << "You instantiated too many Sprites to be the player. Multiplayer is currently not implemented." << std::endl;
+		End();
+	}
 	Tick();
 	End();
 }
@@ -55,8 +64,6 @@ void Scene::End()
 
 void Scene::Tick()
 {
-	bool bPlay = true;
-	bool bPaused = false;
 	bool bWindowVisible = true;
 	SDL_Event Event;
 	while (bPlay)
@@ -70,34 +77,29 @@ void Scene::Tick()
 		LastTime = CurrentTime;
 		if (!bPaused)
 		{
-			for (int i = 0; i < Sprites.size()-1; ++i)
-			{	
-				/*std::cout << "Vertices of 1st:" << std::endl;
-				for (int j = 0; j < Sprites[i]->vertices.size(); ++j)
-				{
-					std::cout << "(" << Sprites[i]->vertices[j].x << ", " << Sprites[i]->vertices[j].y << ")" << std::endl;
-				}*/
-				Sprites[i]->Update();
-				if (Sprites[i]->CollidesWith(Sprites[i+1]))
-				{
-					std::cout << "Two things collided!" << std::endl;
-				}
-				else
-				{
-					std::cout << "No collision" << std::endl;
-				}
-			}
-			Keyboard = SDL_GetKeyboardState(NULL);
-
-			while (SDL_PollEvent(&Event))
-			{
-				EventHandler(Event, OUT bPlay, OUT bPaused); // this function was also created to help alleviate 
-			}
-			SDL_RenderPresent(Renderer);
+			//for (int i = 0; i < Sprites.size(); ++i)
+			//{
+			//	Sprites[i]->Update();
+			//	/*if (Sprites[i]->CollidesWith(Sprites[i+1]))
+			//	{
+			//		std::cout << "Two things collided!" << std::endl;
+			//	}
+			//	else
+			//	{
+			//		std::cout << "No collision" << std::endl;
+			//	}*/
+			//}
+			//SDL_PollEvent(&Event);
+			//EventHandler(Event, OUT bPlay, OUT bPaused);
+			SDL_PollEvent(&Event);
+			std::thread ST = std::thread(&Scene::SceneThread, this, Event);
+			std::thread GT = std::thread(&Scene::GameThread, this);
+			ST.join();
+			GT.join();
 		}
 		else
 		{
-			PausedEventHandler(Event, OUT bPlay, OUT bPaused); // this function was also created to help alleviate 
+			PausedEventHandler(OUT bPlay, OUT bPaused); // this function was also created to help alleviate 
 		}
 	}
 	return;
@@ -193,8 +195,9 @@ void Scene::EventHandler(SDL_Event Event, bool& bPlay, bool& bPaused)
 	}
 }
 
-void Scene::PausedEventHandler(SDL_Event Event, bool& bPlay, bool& bPaused)
+void Scene::PausedEventHandler(bool& bPlay, bool& bPaused)
 {
+	SDL_Event Event;
 	SDL_PollEvent(&Event);
 	if (Event.type == SDL_KEYDOWN)
 	{
@@ -218,5 +221,39 @@ void Scene::InitSprites(std::vector<std::string> ImagePaths, std::vector<Vec2D> 
 		Sprites[i]->Scene = this;
 		Sprites[i]->SetImage(Renderer, ImagePaths[i], InitialPositions[i]);
 		Sprites[i]->Draw(Renderer);
+		if (Sprites[i]->bPlayer)
+		{
+			++PCount;
+		}
+	}
+}
+
+void Scene::SceneThread(SDL_Event Event)
+{
+	std::cout << "Scene Thread running" << std::endl;
+	//SDL_Event Event;
+	SDL_PollEvent(&Event);
+	//EventHandler(Event, OUT bPlay, OUT bPaused); // this function was also created to help alleviate 
+	while (SDL_PollEvent(&Event))
+	{
+		EventHandler(Event, OUT bPlay, OUT bPaused); // this function was also created to help alleviate 
+	}
+	SDL_RenderPresent(Renderer);
+}
+
+void Scene::GameThread()
+{
+	std::cout << "Game Thread running" << std::endl;
+	for (int i = 0; i < Sprites.size(); ++i)
+	{
+		Sprites[i]->Update();
+		/*if (Sprites[i]->CollidesWith(Sprites[i+1]))
+		{
+			std::cout << "Two things collided!" << std::endl;
+		}
+		else
+		{
+			std::cout << "No collision" << std::endl;
+		}*/
 	}
 }

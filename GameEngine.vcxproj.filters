@@ -24,6 +24,9 @@
     <ClCompile Include="2D Engine\Source\Sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="2D Engine\Source\Ship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D Engine\Source\Scene.h">
@@ -33,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="2D Engine\Source\Vec2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="2D Engine\Source\Ship.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -9,7 +9,7 @@
 class Scene;
 class Sprite
 {
-	private:
+	protected:
 		SDL_Texture* Image;
 		Vec2D Size;
 		Vec2D Position;
@@ -20,16 +20,21 @@ class Sprite
 		Vec2D Acceleration; //ddx, ddy
 		Scene* Scene;
 		Uint8* BoundAction;
-		void VectorProjection(double Speed); //convert into individual Vector (Vec2D) components x and y
-		double ConvertToRadians(double Degrees);
 		SDL_Rect texture;
 		std::vector<Vec2D> vertices;
 		bool bCollisionEnabled;
+		bool bPlayer = false;
+		double ConvertToDegrees(double Radians);
+	private:
+		void VectorProjection(double Speed); //convert into individual Vector (Vec2D) components x and y
+		double ConvertToRadians(double Degrees);
 	public:
 		Sprite();
 		SDL_Texture* SetImage(SDL_Renderer* renderer, std::string ImagePath, Vec2D InitPosition);
 		void Draw(SDL_Renderer* renderer);
 		virtual void Update();
+		virtual void PlayerInput(SDL_Event Event); //If class not meant to ever be a player, just return
+		virtual void DefaultBehavior(); //Standard behavior if not controlled by player, possibly AI behavior
 		void Hide();
 		void Show();
 		void SetSpeed(double Speed);
@@ -46,5 +51,6 @@ class Sprite
 		void SetCollisionEnabled(bool Set);
 		void MoveSprite();
 		std::stack<Vec2D> GetNormals();
+		void SetPlayerStatus(bool IsPlayer);
 		friend class Scene;
 };

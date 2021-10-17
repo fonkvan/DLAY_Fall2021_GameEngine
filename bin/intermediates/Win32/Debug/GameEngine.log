@@ -1,13 +1,4 @@
-﻿  EngineCore.cpp
-  Scene.cpp
-C:\Users\vilif\source\repos\DLAY_Fall2021_GameEngine\2D Engine\Source\Scene.cpp(73,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\vilif\source\repos\DLAY_Fall2021_GameEngine\2D Engine\Source\Scene.cpp(216,20): warning C4018: '<': signed/unsigned mismatch
-  Sprite.cpp
-C:\Users\vilif\source\repos\DLAY_Fall2021_GameEngine\2D Engine\Source\Sprite.cpp(46,27): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-C:\Users\vilif\source\repos\DLAY_Fall2021_GameEngine\2D Engine\Source\Sprite.cpp(47,27): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-C:\Users\vilif\source\repos\DLAY_Fall2021_GameEngine\2D Engine\Source\Sprite.cpp(48,18): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-C:\Users\vilif\source\repos\DLAY_Fall2021_GameEngine\2D Engine\Source\Sprite.cpp(49,18): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-C:\Users\vilif\source\repos\DLAY_Fall2021_GameEngine\2D Engine\Source\Sprite.cpp(213,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\vilif\source\repos\DLAY_Fall2021_GameEngine\2D Engine\Source\Sprite.cpp(219,21): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-  GameEngine.vcxproj -> C:\Users\vilif\source\repos\DLAY_Fall2021_GameEngine\bin\Win32\Debug\GameEngine.exe
+﻿  Scene.cpp
+C:\Users\vilif\source\repos\GameEngine\2D Engine\Source\Scene.cpp(219,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\vilif\source\repos\GameEngine\2D Engine\Source\Scene.cpp(247,20): warning C4018: '<': signed/unsigned mismatch
+  GameEngine.vcxproj -> C:\Users\vilif\source\repos\GameEngine\bin\Win32\Debug\GameEngine.exe

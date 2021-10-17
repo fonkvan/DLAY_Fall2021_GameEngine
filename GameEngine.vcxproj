@@ -21,10 +21,12 @@
   <ItemGroup>
     <ClCompile Include="2D Engine\Source\EngineCore.cpp" />
     <ClCompile Include="2D Engine\Source\Scene.cpp" />
+    <ClCompile Include="2D Engine\Source\Ship.cpp" />
     <ClCompile Include="2D Engine\Source\Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D Engine\Source\Scene.h" />
+    <ClInclude Include="2D Engine\Source\Ship.h" />
     <ClInclude Include="2D Engine\Source\Sprite.h" />
     <ClInclude Include="2D Engine\Source\Vec2D.h" />
   </ItemGroup>
