@@ -13,9 +13,12 @@ class Sprite
 		SDL_Texture* Image;
 		Vec2D Size;
 		Vec2D Position;
+		double LastAngle;
 		double ImageAngle;
 		double MoveAngle; //MoveAngle and Speed used to calculate dx,dy
 		double Speed;
+		double Scale;
+		Vec2D Center;
 		Vec2D Velocity; //dx, dy
 		Vec2D Acceleration; //ddx, ddy
 		Scene* Scene;
@@ -30,10 +33,11 @@ class Sprite
 		double ConvertToRadians(double Degrees);
 	public:
 		Sprite();
+		void SetScale(double s);
 		SDL_Texture* SetImage(SDL_Renderer* renderer, std::string ImagePath, Vec2D InitPosition);
 		void Draw(SDL_Renderer* renderer);
-		virtual void Update();
-		virtual void PlayerInput(SDL_Event Event); //If class not meant to ever be a player, just return
+		virtual void Update(SDL_Renderer* renderer);
+		virtual void PlayerInput(SDL_Event Event, SDL_Renderer* renderer); //If class not meant to ever be a player, just return
 		virtual void DefaultBehavior(); //Standard behavior if not controlled by player, possibly AI behavior
 		void Hide();
 		void Show();
@@ -48,9 +52,11 @@ class Sprite
 		double DistanceTo(Sprite* OtherSprite);
 		double AngleTo(Sprite* OtherSprite);
 		void SetVertices();
+		void UpdateVertices();
 		void SetCollisionEnabled(bool Set);
 		void MoveSprite();
 		std::stack<Vec2D> GetNormals();
 		void SetPlayerStatus(bool IsPlayer);
+		Vec2D GetPosition(); //returns Center position
 		friend class Scene;
 };

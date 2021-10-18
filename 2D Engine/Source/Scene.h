@@ -11,6 +11,7 @@ class Scene
 	private:
 		bool bPlay = true;
 		bool bPaused = false;
+		Sprite* Player;
 		SDL_Window* Window;
 		SDL_Renderer* Renderer = nullptr;
 		Vec2D Size;
@@ -35,9 +36,9 @@ class Scene
 		Vec2D GetMousePos();
 		void Hide();
 		void Show();
-		void SceneThread(SDL_Event Event);
-		void GameThread();
 		void EventHandler(SDL_Event Event, bool& bPlay, bool& bPaused);
 		void PausedEventHandler(bool& bPlay, bool& bPaused);
 		void InitSprites(std::vector<std::string> ImagePaths, std::vector<Vec2D> InitialPositions);
+		Sprite* GetPlayerSprite();
+		void SpawnSpriteAtLocation(Sprite* s, std::string ImagePath, Vec2D SpawnLocation, double Scale);
 };

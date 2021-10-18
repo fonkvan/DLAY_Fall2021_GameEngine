@@ -1,4 +1,4 @@
-﻿  Scene.cpp
-C:\Users\vilif\source\repos\GameEngine\2D Engine\Source\Scene.cpp(219,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\vilif\source\repos\GameEngine\2D Engine\Source\Scene.cpp(247,20): warning C4018: '<': signed/unsigned mismatch
-  GameEngine.vcxproj -> C:\Users\vilif\source\repos\GameEngine\bin\Win32\Debug\GameEngine.exe
+﻿  Ship.cpp
+C:\Users\vilif\source\repos\DLAY_Fall2021_GameEngine\2D Engine\Source\Ship.cpp(40,9): warning C4101: 'MA': unreferenced local variable
+C:\Users\vilif\source\repos\DLAY_Fall2021_GameEngine\2D Engine\Source\Ship.cpp(39,9): warning C4101: 'IA': unreferenced local variable
+  GameEngine.vcxproj -> C:\Users\vilif\source\repos\DLAY_Fall2021_GameEngine\bin\Win32\Debug\GameEngine.exe

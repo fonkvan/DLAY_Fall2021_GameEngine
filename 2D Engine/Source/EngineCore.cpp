@@ -10,15 +10,22 @@ int main(int argc, char* args[])
 {
 	Scene Main = Scene();
 	Ship ship = Ship();
-	ship.SetSpeed(300);
+	Ship oship = Ship();
+	ship.SetScale(0.2);
+	oship.SetScale(0.2);
 	ship.SetPlayerStatus(true);
 	std::vector<Vec2D> InitPositions;
-	InitPositions.push_back(Vec2D{300, 300});
+	InitPositions.push_back(Vec2D{300, 600});
+	InitPositions.push_back(Vec2D{345, 300});
+	oship.SetImageAngle(180);
 	std::string shipPath = "SpaceShipB.PNG";
+	std::string oshipPath = shipPath;
 	std::vector<Sprite*> Sprites;
 	std::vector<std::string> ImagePaths;
 	Sprites.push_back(&ship);
+	Sprites.push_back(&oship);
 	ImagePaths.push_back(shipPath);
+	ImagePaths.push_back(oshipPath);
 	Main.Start(Sprites, ImagePaths, InitPositions);
 	
 	return(0);

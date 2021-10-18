@@ -10,6 +10,8 @@ Sprite::Sprite()
 	Position.x = 0;
 	Position.y = 0;
 	ImageAngle = 0.0;
+	LastAngle = ImageAngle;
+	Scale = 1.0;
 	MoveAngle = 0.0;
 	Speed = 0.0;
 	Velocity.x = 0;
@@ -19,6 +21,11 @@ Sprite::Sprite()
 	Scene = nullptr;
 	BoundAction = 0;
 	bCollisionEnabled = true;
+}
+
+void Sprite::SetScale(double s)
+{
+	Scale = s;
 }
 
 void Sprite::VectorProjection(double Speed)
@@ -48,8 +55,10 @@ SDL_Texture* Sprite::SetImage(SDL_Renderer* renderer, std::string ImagePath, Vec
 		texture.y = InitPosition.y;
 		Position.x = texture.x;
 		Position.y = texture.y;
-		texture.w = 1.0*w;
-		texture.h = 1.0*h;
+		texture.w = Scale*w;
+		texture.h = Scale*h;
+		Center.x = Position.x + (texture.w / 2.00);
+		Center.y = Position.y + (texture.h / 2.00);
 		SetVertices();
 		return Image;
 	}
@@ -61,8 +70,8 @@ void Sprite::Draw(SDL_Renderer* renderer)
 	SDL_RenderPresent(renderer);
 }
 
-void Sprite::Update(){ return; }
-void Sprite::PlayerInput(SDL_Event Event){ return; }
+void Sprite::Update(SDL_Renderer* renderer){ return; } //Update, in implemenatation, should only be updating location, rotation, speed etc.
+void Sprite::PlayerInput(SDL_Event Event, SDL_Renderer* renderer){ return; }
 void Sprite::DefaultBehavior(){ return; }
 
 void Sprite::Hide()
@@ -110,18 +119,6 @@ bool Sprite::CollidesWith(Sprite* OtherSprite)
 {
 	std::stack<Vec2D> P1Normals = GetNormals();
 	std::stack<Vec2D> P2Normals = OtherSprite->GetNormals();
-	//std::cout << "P1 Normals: " << std::endl;
-	//while (!P1Normals.empty())
-	//{
-	//	std::cout << "(" << P1Normals.top().x << ", " << P1Normals.top().y << ")" << std::endl;
-	//	P1Normals.pop();
-	//}
-	//std::cout << "P2 Normals: " << std::endl;
-	//while (!P2Normals.empty())
-	//{
-	//	std::cout << "(" << P2Normals.top().x << ", " << P2Normals.top().y << ")" << std::endl;
-	//	P2Normals.pop();
-	//}
 	if(!SeparateAxisTheorem(P1Normals, OtherSprite)){ return false; }
 	if(!SeparateAxisTheorem(P2Normals, OtherSprite)){ return false; }
 	//if we got through all normals we can prove that there is a collision
@@ -160,10 +157,30 @@ void Sprite::SetVertices()
 	Vec2D vert2{(double)texture.x + (double)texture.w, (double)texture.y};
 	Vec2D vert3{(double)texture.x, (double)texture.y + (double)texture.h};
 	Vec2D vert4{(double)texture.x + (double)texture.w, (double)texture.y + (double)texture.h};
+	//Order of insertion of vertices matters
 	vertices.push_back(vert1);
 	vertices.push_back(vert3);
 	vertices.push_back(vert4);
 	vertices.push_back(vert2);
+}
+
+void Sprite::UpdateVertices()
+{
+	std::vector<Vec2D> NewVerts;
+	Vec2D vert;
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vert.x = ((vertices[i].x - Center.x) * cos(ImageAngle - LastAngle)) - ((vertices[i].y - Center.y) * sin(ImageAngle - LastAngle)) + Center.x;
+		vert.y = ((vertices[i].x - Center.x)*sin(ImageAngle - LastAngle)) + ((vertices[i].y - Center.y)*cos(ImageAngle - LastAngle)) + Center.y;
+		NewVerts.push_back(vert);
+	}
+	LastAngle = ImageAngle;
+	vertices = NewVerts;
+	//for (Vec2D vert : vertices)
+	//{
+	//	vert.x = ((vert.x - Center.x)*cos(ImageAngle)) - ((vert.y - Center.y)*sin(ImageAngle)) + Center.x;
+	//	vert.y = ((vert.x - Center.x)*sin(ImageAngle)) + ((vert.y - Center.y)*cos(ImageAngle)) + Center.y;
+	//}
 }
 
 void Sprite::SetCollisionEnabled(bool Set)
@@ -173,14 +190,21 @@ void Sprite::SetCollisionEnabled(bool Set)
 
 void Sprite::MoveSprite()
 {
+	std::vector<Vec2D> NewVerts;
+	Vec2D vert;
+	texture.x += Velocity.x;
+	texture.y += Velocity.y;
 	Position.x += Velocity.x;
 	Position.y += Velocity.y;
-	for (Vec2D vert : vertices)
+	Center.x += Velocity.x;
+	Center.y += Velocity.y;
+	for (int i = 0; i < vertices.size(); ++i)
 	{
-		vert.x += Velocity.x;
-		vert.y += Velocity.y;
+		vert.x = vertices[i].x + Velocity.x;
+		vert.y = vertices[i].y + Velocity.y;
+		NewVerts.push_back(vert);
 	}
-	std::cout << "(" << Position.x << ", " << Position.y << ")" << std::endl;
+	vertices = NewVerts;
 }
 
 //Returns the normalized normal vectors of an 'edge' (line seg between 2 pts) of a sprite 
@@ -236,10 +260,10 @@ bool Sprite::SeparateAxisTheorem(std::stack<Vec2D> Normals, Sprite* OtherSprite)
 			p2min = fmin(p2min, test);
 			p2max = fmax(p2max, test);
 		}
-		Vec2D VectorOffset{ Position.x - OtherSprite->Position.x, Position.y - OtherSprite->Position.y };
+		/*Vec2D VectorOffset{ Position.x - OtherSprite->Position.x, Position.y - OtherSprite->Position.y };
 		double ScalarOffset = VectorOffset.DotProduct(Normals.top());
 		p1min += ScalarOffset;
-		p1max += ScalarOffset;
+		p1max += ScalarOffset;*/
 		if (p1min - p2max > 0 || p2min - p1max > 0)
 		{
 			return false;
@@ -252,4 +276,9 @@ bool Sprite::SeparateAxisTheorem(std::stack<Vec2D> Normals, Sprite* OtherSprite)
 void Sprite::SetPlayerStatus(bool IsPlayer)
 {
 	bPlayer = IsPlayer;
+}
+
+Vec2D Sprite::GetPosition()
+{
+	return Center;
 }

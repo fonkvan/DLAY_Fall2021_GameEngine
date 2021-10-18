@@ -1,8 +1,7 @@
 #include <iostream>
-#include <functional>
-#include <thread>
 #include "Scene.h"
 #include "Sprite.h"
+#include "Laser.h"
 
 //macro OUT does nothing but explicitly states that something marked as OUT is an out parameter
 //ie. it could be changed in the function it's being passed to
@@ -52,6 +51,7 @@ void Scene::Start(std::vector<Sprite*> Sprites, std::vector<std::string> ImagePa
 		std::cout << "You instantiated too many Sprites to be the player. Multiplayer is currently not implemented." << std::endl;
 		End();
 	}
+	GetPlayerSprite();
 	Tick();
 	End();
 }
@@ -77,25 +77,39 @@ void Scene::Tick()
 		LastTime = CurrentTime;
 		if (!bPaused)
 		{
-			//for (int i = 0; i < Sprites.size(); ++i)
-			//{
-			//	Sprites[i]->Update();
-			//	/*if (Sprites[i]->CollidesWith(Sprites[i+1]))
-			//	{
-			//		std::cout << "Two things collided!" << std::endl;
-			//	}
-			//	else
-			//	{
-			//		std::cout << "No collision" << std::endl;
-			//	}*/
-			//}
-			//SDL_PollEvent(&Event);
-			//EventHandler(Event, OUT bPlay, OUT bPaused);
 			SDL_PollEvent(&Event);
+			EventHandler(Event, OUT bPlay, OUT bPaused);
+			/*SDL_PollEvent(&Event);
 			std::thread ST = std::thread(&Scene::SceneThread, this, Event);
 			std::thread GT = std::thread(&Scene::GameThread, this);
 			ST.join();
-			GT.join();
+			GT.join();*/
+			SDL_RenderClear(Renderer);
+			for (Sprite* s : Sprites)
+			{
+				s->Update(Renderer);
+				SDL_RenderCopyEx(Renderer, s->Image, NULL, &s->texture, s->ConvertToDegrees(s->ImageAngle), NULL, SDL_FLIP_NONE);
+
+				//Draws vertices for debugging
+				for (Vec2D vert : s->vertices)
+				{
+					SDL_SetRenderDrawColor(Renderer, 0, 0, 255, 255);
+					SDL_RenderDrawPoint(Renderer, vert.x, vert.y);
+				}
+			}
+			SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
+			SDL_RenderPresent(Renderer);
+			for (int i = 0; i < Sprites.size() - 1; ++i)
+			{
+				if (Sprites[i]->CollidesWith(Sprites[i + 1]))
+				{
+					std::cout << "Two things collided!" << std::endl;
+				}
+				else
+				{
+					std::cout << "No collision" << std::endl;
+				}
+			}
 		}
 		else
 		{
@@ -149,6 +163,7 @@ void Scene::EventHandler(SDL_Event Event, bool& bPlay, bool& bPaused)
 	bool bWindowVisible = true;
 	if (Event.type == SDL_KEYDOWN)
 	{
+		//SYSTEM KEYS
 		if (Event.key.keysym.sym == SDLK_p)
 		{
 			bPaused = true;
@@ -192,6 +207,18 @@ void Scene::EventHandler(SDL_Event Event, bool& bPlay, bool& bPaused)
 				Show();
 			}
 		}
+		//PLAYER KEYS
+		if (Event.key.keysym.sym == SDLK_a ||
+			Event.key.keysym.sym == SDLK_d ||
+			Event.key.keysym.sym == SDLK_w ||
+			Event.key.keysym.sym == SDLK_s)
+		{
+			Player->PlayerInput(Event, Renderer);
+		}
+	}
+	if (Event.type == SDL_MOUSEBUTTONDOWN)
+	{
+		Player->PlayerInput(Event, Renderer);
 	}
 }
 
@@ -228,32 +255,24 @@ void Scene::InitSprites(std::vector<std::string> ImagePaths, std::vector<Vec2D> 
 	}
 }
 
-void Scene::SceneThread(SDL_Event Event)
+Sprite* Scene::GetPlayerSprite()
 {
-	std::cout << "Scene Thread running" << std::endl;
-	//SDL_Event Event;
-	SDL_PollEvent(&Event);
-	//EventHandler(Event, OUT bPlay, OUT bPaused); // this function was also created to help alleviate 
-	while (SDL_PollEvent(&Event))
+	for (Sprite* s : Sprites)
 	{
-		EventHandler(Event, OUT bPlay, OUT bPaused); // this function was also created to help alleviate 
+		if (s->bPlayer)
+		{	
+			//There should only be one sprite defined to be the player, so we can break away as soon as we find it
+			Player = s;
+			return Player;
+		}
 	}
-	SDL_RenderPresent(Renderer);
 }
 
-void Scene::GameThread()
+void Scene::SpawnSpriteAtLocation(Sprite* s, std::string ImagePath, Vec2D SpawnLocation, double Scale)
 {
-	std::cout << "Game Thread running" << std::endl;
-	for (int i = 0; i < Sprites.size(); ++i)
-	{
-		Sprites[i]->Update();
-		/*if (Sprites[i]->CollidesWith(Sprites[i+1]))
-		{
-			std::cout << "Two things collided!" << std::endl;
-		}
-		else
-		{
-			std::cout << "No collision" << std::endl;
-		}*/
-	}
+	s->Scene = this;
+	s->Scale = Scale;
+	s->SetImage(Renderer, ImagePath, SpawnLocation);
+	s->Draw(Renderer);
+	Sprites.push_back(s);
 }
