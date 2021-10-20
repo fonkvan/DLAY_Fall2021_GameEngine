@@ -20,17 +20,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="2D Engine\Source\EngineCore.cpp" />
+    <ClCompile Include="2D Engine\Source\Game.cpp" />
     <ClCompile Include="2D Engine\Source\Scene.cpp" />
     <ClCompile Include="2D Engine\Source\Sprite.cpp" />
     <ClCompile Include="Games\SpaceGame\Source\Laser.cpp" />
     <ClCompile Include="Games\SpaceGame\Source\Ship.cpp" />
+    <ClCompile Include="Games\SpaceGame\Source\SpaceGame.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="2D Engine\Source\Game.h" />
     <ClInclude Include="2D Engine\Source\Scene.h" />
     <ClInclude Include="2D Engine\Source\Sprite.h" />
     <ClInclude Include="2D Engine\Source\Vec2D.h" />
     <ClInclude Include="Games\SpaceGame\Source\Laser.h" />
     <ClInclude Include="Games\SpaceGame\Source\Ship.h" />
+    <ClInclude Include="Games\SpaceGame\Source\SpaceGame.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SDL2.dll" />

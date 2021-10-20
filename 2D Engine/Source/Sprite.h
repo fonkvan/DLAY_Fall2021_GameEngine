@@ -1,3 +1,4 @@
+//This is an abstract class and should not be instantiated on it's own.
 #pragma once
 #include <stack>
 #include <string>

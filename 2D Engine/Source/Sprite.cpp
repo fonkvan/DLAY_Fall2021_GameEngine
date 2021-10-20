@@ -65,7 +65,6 @@ SDL_Texture* Sprite::SetImage(SDL_Renderer* renderer, std::string ImagePath, Vec
 		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 		SDL_RenderDrawPoint(renderer, Center.x, Center.y);
 		SDL_RenderDrawPoint(renderer, texture.x, texture.y);
-		SetVertices();
 		return Image;
 	}
 }

@@ -30,6 +30,12 @@
     <ClCompile Include="Games\SpaceGame\Source\Ship.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="2D Engine\Source\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Games\SpaceGame\Source\SpaceGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D Engine\Source\Scene.h">
@@ -45,6 +51,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Games\SpaceGame\Source\Ship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="2D Engine\Source\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Games\SpaceGame\Source\SpaceGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

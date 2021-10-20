@@ -22,10 +22,14 @@ Scene::Scene()
 	RefreshSeconds = 1.00 / Framerate;
 }
 
-void Scene::Start(std::vector<Sprite*> Sprites, std::vector<std::string> ImagePaths, std::vector<Vec2D> InitialPositions)
+void Scene::Start(const char* GameName, std::vector<Sprite*> Sprites, std::vector<std::string> ImagePaths, std::vector<Vec2D> InitialPositions)
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
-	Window = SDL_CreateWindow("Engine Window (Default)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, (int)Size.x, (int)Size.y, SDL_WINDOW_RESIZABLE);
+	if (GameName == "")
+	{
+		GameName = "Engine Window (Default)";
+	}
+	Window = SDL_CreateWindow(GameName, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, (int)Size.x, (int)Size.y, SDL_WINDOW_RESIZABLE);
 	Renderer = SDL_CreateRenderer(Window, -1, SDL_RENDERER_ACCELERATED);
 	HideCursor();
 	if (Window == nullptr)
@@ -243,6 +247,7 @@ void Scene::InitSprites(std::vector<std::string> ImagePaths, std::vector<Vec2D> 
 	{
 		Sprites[i]->Scene = this;
 		Sprites[i]->SetImage(Renderer, ImagePaths[i], InitialPositions[i]);
+		Sprites[i]->SetVertices();
 		Sprites[i]->Draw(Renderer);
 		if (Sprites[i]->bPlayer)
 		{

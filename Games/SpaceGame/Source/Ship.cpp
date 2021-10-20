@@ -2,7 +2,7 @@
 #include <vector>
 #include "Laser.h"
 #include "Ship.h"
-#include "Scene.h"
+#include "..\..\2D Engine\Source\Scene.h"
 
 #define OUT
 Ship::Ship()
@@ -50,7 +50,7 @@ void Ship::PlayerInput(SDL_Event Event, SDL_Renderer* renderer)
 		if (Event.key.keysym.sym == SDLK_w)
 		{
 			//MoveAngle = -M_PI/2;
-			SetSpeed(2.00);
+			SetSpeed(3.00);
 			MoveSprite();
 		}
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);

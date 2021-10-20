@@ -26,7 +26,7 @@ class Scene
 		int PCount = 0;
 	public:
 		Scene();
-		void Start(std::vector<Sprite*> Sprites, std::vector<std::string> ImagePaths, std::vector<Vec2D> InitialPositions);
+		void Start(const char* GameName, std::vector<Sprite*> Sprites, std::vector<std::string> ImagePaths, std::vector<Vec2D> InitialPositions);
 		void End();
 		void Tick();
 		void Pause();
