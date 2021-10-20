@@ -1,7 +1,6 @@
 #include <iostream>
 #include "Scene.h"
 #include "Sprite.h"
-#include "Laser.h"
 
 //macro OUT does nothing but explicitly states that something marked as OUT is an out parameter
 //ie. it could be changed in the function it's being passed to

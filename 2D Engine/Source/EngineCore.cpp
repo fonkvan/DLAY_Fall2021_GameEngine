@@ -2,7 +2,7 @@
 #include <vector>
 #include "SDL.h"
 #include "Scene.h"
-#include "Ship.h"
+#include "..\..\Games\SpaceGame\Source\Ship.h"
 #include "Sprite.h"
 #include "Vec2D.h"
 
@@ -18,7 +18,7 @@ int main(int argc, char* args[])
 	InitPositions.push_back(Vec2D{300, 600});
 	InitPositions.push_back(Vec2D{345, 300});
 	oship.SetImageAngle(180);
-	std::string shipPath = "SpaceShipB.PNG";
+	std::string shipPath = "Games/SpaceGame/Assets/SpaceShipB.PNG";
 	std::string oshipPath = shipPath;
 	std::vector<Sprite*> Sprites;
 	std::vector<std::string> ImagePaths;

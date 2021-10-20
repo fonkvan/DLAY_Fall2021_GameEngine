@@ -24,10 +24,10 @@
     <ClCompile Include="2D Engine\Source\Sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="2D Engine\Source\Ship.cpp">
+    <ClCompile Include="Games\SpaceGame\Source\Laser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="2D Engine\Source\Laser.cpp">
+    <ClCompile Include="Games\SpaceGame\Source\Ship.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,10 +41,10 @@
     <ClInclude Include="2D Engine\Source\Vec2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="2D Engine\Source\Ship.h">
+    <ClInclude Include="Games\SpaceGame\Source\Laser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="2D Engine\Source\Laser.h">
+    <ClInclude Include="Games\SpaceGame\Source\Ship.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
