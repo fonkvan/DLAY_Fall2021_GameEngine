@@ -1,4 +1,13 @@
-﻿  Ship.cpp
-C:\Users\vilif\source\repos\DLAY_Fall2021_GameEngine\2D Engine\Source\Ship.cpp(40,9): warning C4101: 'MA': unreferenced local variable
-C:\Users\vilif\source\repos\DLAY_Fall2021_GameEngine\2D Engine\Source\Ship.cpp(39,9): warning C4101: 'IA': unreferenced local variable
-  GameEngine.vcxproj -> C:\Users\vilif\source\repos\DLAY_Fall2021_GameEngine\bin\Win32\Debug\GameEngine.exe
+﻿  Sprite.cpp
+C:\Users\vilif\source\repos\GameEngine\2D Engine\Source\Sprite.cpp(55,27): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\vilif\source\repos\GameEngine\2D Engine\Source\Sprite.cpp(56,27): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\vilif\source\repos\GameEngine\2D Engine\Source\Sprite.cpp(59,20): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\vilif\source\repos\GameEngine\2D Engine\Source\Sprite.cpp(60,20): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\vilif\source\repos\GameEngine\2D Engine\Source\Sprite.cpp(66,49): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\vilif\source\repos\GameEngine\2D Engine\Source\Sprite.cpp(66,39): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\vilif\source\repos\GameEngine\2D Engine\Source\Sprite.cpp(200,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\vilif\source\repos\GameEngine\2D Engine\Source\Sprite.cpp(208,23): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\vilif\source\repos\GameEngine\2D Engine\Source\Sprite.cpp(209,23): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\vilif\source\repos\GameEngine\2D Engine\Source\Sprite.cpp(254,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\vilif\source\repos\GameEngine\2D Engine\Source\Sprite.cpp(260,21): warning C4018: '<': signed/unsigned mismatch
+  GameEngine.vcxproj -> C:\Users\vilif\source\repos\GameEngine\bin\Win32\Debug\GameEngine.exe

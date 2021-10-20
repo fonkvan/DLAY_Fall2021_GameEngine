@@ -49,31 +49,31 @@ void Ship::PlayerInput(SDL_Event Event, SDL_Renderer* renderer)
 	{
 		if (Event.key.keysym.sym == SDLK_w)
 		{
-			MoveAngle = -M_PI/2;
-			SetSpeed(12.00);
+			//MoveAngle = -M_PI/2;
+			SetSpeed(2.00);
 			MoveSprite();
 		}
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		if (Event.key.keysym.sym == SDLK_a)
 		{
-			MoveAngle = M_PI;
+		/*	MoveAngle = M_PI;
 			SetSpeed(12.00);
-			MoveSprite();
-		/*	IA = ConvertToDegrees(ImageAngle);
+			MoveSprite();*/
+			IA = ConvertToDegrees(ImageAngle);
 			MA = ConvertToDegrees(MoveAngle);
 			SetImageAngle(IA - 1);
-			SetMoveAngle(MA - 1);*/
+			SetMoveAngle(MA - 1);
 			UpdateVertices();
 		}
 		if (Event.key.keysym.sym == SDLK_d)
 		{
-			MoveAngle = 0;
+			/*MoveAngle = 0;
 			SetSpeed(12.00);
-			MoveSprite();
-			/*IA = ConvertToDegrees(ImageAngle);
+			MoveSprite();*/
+			IA = ConvertToDegrees(ImageAngle);
 			MA = ConvertToDegrees(MoveAngle);
 			SetImageAngle(IA + 1);
-			SetMoveAngle(MA + 1);*/
+			SetMoveAngle(MA + 1);
 			UpdateVertices();
 		}
 	}
@@ -103,7 +103,5 @@ void Ship::DefaultBehavior()
 
 void Ship::Fire()
 {
-	Laser l = Laser();
-	Vec2D SpawnLoc{Center.x, Center.y - 50};
-	Scene->SpawnSpriteAtLocation(&l, "Laser.png", SpawnLoc, 1.0);
+	
 }

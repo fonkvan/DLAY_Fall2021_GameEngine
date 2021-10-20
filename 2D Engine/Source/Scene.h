@@ -40,5 +40,4 @@ class Scene
 		void PausedEventHandler(bool& bPlay, bool& bPaused);
 		void InitSprites(std::vector<std::string> ImagePaths, std::vector<Vec2D> InitialPositions);
 		Sprite* GetPlayerSprite();
-		void SpawnSpriteAtLocation(Sprite* s, std::string ImagePath, Vec2D SpawnLocation, double Scale);
 };

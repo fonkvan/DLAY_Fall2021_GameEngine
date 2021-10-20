@@ -18,6 +18,7 @@ class Sprite
 		double MoveAngle; //MoveAngle and Speed used to calculate dx,dy
 		double Speed;
 		double Scale;
+		Vec2D D;
 		Vec2D Center;
 		Vec2D Velocity; //dx, dy
 		Vec2D Acceleration; //ddx, ddy

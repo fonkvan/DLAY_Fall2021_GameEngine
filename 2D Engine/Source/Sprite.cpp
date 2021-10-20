@@ -34,6 +34,7 @@ void Sprite::VectorProjection(double Speed)
 	Velocity.y = Speed * sin(MoveAngle) + Acceleration.y;
 	this->Speed = sqrt((Velocity.x * Velocity.x) + (Velocity.y * Velocity.y));
 	MoveAngle = atan2(Velocity.y, Velocity.x);
+	//ImageAngle = MoveAngle + M_PI/2;
 }
 
 SDL_Texture* Sprite::SetImage(SDL_Renderer* renderer, std::string ImagePath, Vec2D InitPosition)
@@ -59,6 +60,11 @@ SDL_Texture* Sprite::SetImage(SDL_Renderer* renderer, std::string ImagePath, Vec
 		texture.h = Scale*h;
 		Center.x = Position.x + (texture.w / 2.00);
 		Center.y = Position.y + (texture.h / 2.00);
+		D.x = Center.x - texture.x;
+		D.y = Center.y - texture.y;
+		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+		SDL_RenderDrawPoint(renderer, Center.x, Center.y);
+		SDL_RenderDrawPoint(renderer, texture.x, texture.y);
 		SetVertices();
 		return Image;
 	}
@@ -168,19 +174,14 @@ void Sprite::UpdateVertices()
 {
 	std::vector<Vec2D> NewVerts;
 	Vec2D vert;
-	for (int i = 0; i < vertices.size(); ++i)
+	for (int i = vertices.size() - 1; i >= 0; --i)
 	{
 		vert.x = ((vertices[i].x - Center.x) * cos(ImageAngle - LastAngle)) - ((vertices[i].y - Center.y) * sin(ImageAngle - LastAngle)) + Center.x;
-		vert.y = ((vertices[i].x - Center.x)*sin(ImageAngle - LastAngle)) + ((vertices[i].y - Center.y)*cos(ImageAngle - LastAngle)) + Center.y;
+		vert.y = ((vertices[i].x - Center.x) * sin(ImageAngle - LastAngle)) + ((vertices[i].y - Center.y) * cos(ImageAngle - LastAngle)) + Center.y;
 		NewVerts.push_back(vert);
 	}
 	LastAngle = ImageAngle;
 	vertices = NewVerts;
-	//for (Vec2D vert : vertices)
-	//{
-	//	vert.x = ((vert.x - Center.x)*cos(ImageAngle)) - ((vert.y - Center.y)*sin(ImageAngle)) + Center.x;
-	//	vert.y = ((vert.x - Center.x)*sin(ImageAngle)) + ((vert.y - Center.y)*cos(ImageAngle)) + Center.y;
-	//}
 }
 
 void Sprite::SetCollisionEnabled(bool Set)
@@ -192,8 +193,6 @@ void Sprite::MoveSprite()
 {
 	std::vector<Vec2D> NewVerts;
 	Vec2D vert;
-	texture.x += Velocity.x;
-	texture.y += Velocity.y;
 	Position.x += Velocity.x;
 	Position.y += Velocity.y;
 	Center.x += Velocity.x;
@@ -204,6 +203,10 @@ void Sprite::MoveSprite()
 		vert.y = vertices[i].y + Velocity.y;
 		NewVerts.push_back(vert);
 	}
+	//Here I am locking the texture to be relative to the center of the 'collision' box
+	//This prevents a bug where the sprite and the collision box separate from each other
+	texture.x = Center.x - D.x;
+	texture.y = Center.y - D.y;
 	vertices = NewVerts;
 }
 

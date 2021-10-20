@@ -79,17 +79,14 @@ void Scene::Tick()
 		{
 			SDL_PollEvent(&Event);
 			EventHandler(Event, OUT bPlay, OUT bPaused);
-			/*SDL_PollEvent(&Event);
-			std::thread ST = std::thread(&Scene::SceneThread, this, Event);
-			std::thread GT = std::thread(&Scene::GameThread, this);
-			ST.join();
-			GT.join();*/
 			SDL_RenderClear(Renderer);
 			for (Sprite* s : Sprites)
 			{
 				s->Update(Renderer);
 				SDL_RenderCopyEx(Renderer, s->Image, NULL, &s->texture, s->ConvertToDegrees(s->ImageAngle), NULL, SDL_FLIP_NONE);
-
+				SDL_SetRenderDrawColor(Renderer, 0, 0, 255, 255);
+				SDL_RenderDrawPoint(Renderer, s->texture.x, s->texture.y);
+				SDL_RenderDrawPoint(Renderer, s->Center.x, s->Center.y);
 				//Draws vertices for debugging
 				for (Vec2D vert : s->vertices)
 				{
@@ -266,13 +263,4 @@ Sprite* Scene::GetPlayerSprite()
 			return Player;
 		}
 	}
-}
-
-void Scene::SpawnSpriteAtLocation(Sprite* s, std::string ImagePath, Vec2D SpawnLocation, double Scale)
-{
-	s->Scene = this;
-	s->Scale = Scale;
-	s->SetImage(Renderer, ImagePath, SpawnLocation);
-	s->Draw(Renderer);
-	Sprites.push_back(s);
 }
