@@ -147,8 +147,8 @@ void Ship::Fire()
 	l->ImageAngle = ImageAngle;
 	l->Center.x = Center.x;
 	l->Center.y = Center.y;
-	l->texture.x = Center.x - D.x;
-	l->texture.y = Center.y - D.y;
+	l->texture.x = Center.x - l->D.x;
+	l->texture.y = Center.y - l->D.y;
 	l->SetVertices();
 	l->Speed = 20;
 	l->Show();
