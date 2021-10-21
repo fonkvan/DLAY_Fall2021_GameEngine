@@ -56,11 +56,17 @@ void Scene::Start(const char* GameName, std::vector<Sprite*> Sprites, std::vecto
 	}
 	GetPlayerSprite();
 	Tick();
+	Clear();
 	End();
 }
 
 void Scene::End()
 {
+	for (int i = 0; i < Sprites.size(); ++i)
+	{
+		SDL_DestroyTexture(Sprites[i]->Image);
+	}
+	SDL_DestroyRenderer(Renderer);
 	SDL_DestroyWindow(Window);
 	SDL_Quit();
 }
@@ -85,29 +91,29 @@ void Scene::Tick()
 			SDL_RenderClear(Renderer);
 			for (Sprite* s : Sprites)
 			{
-				s->Update(Renderer);
-				SDL_RenderCopyEx(Renderer, s->Image, NULL, &s->texture, s->ConvertToDegrees(s->ImageAngle), NULL, SDL_FLIP_NONE);
-				SDL_SetRenderDrawColor(Renderer, 0, 0, 255, 255);
-				SDL_RenderDrawPoint(Renderer, s->texture.x, s->texture.y);
-				SDL_RenderDrawPoint(Renderer, s->Center.x, s->Center.y);
-				//Draws vertices for debugging
-				for (Vec2D vert : s->vertices)
+				if (s->bDraw)
 				{
-					SDL_SetRenderDrawColor(Renderer, 0, 0, 255, 255);
-					SDL_RenderDrawPoint(Renderer, vert.x, vert.y);
+					s->Update(Renderer);
+					SDL_RenderCopyEx(Renderer, s->Image, NULL, &s->texture, s->ConvertToDegrees(s->ImageAngle), NULL, SDL_FLIP_NONE);
 				}
+				//SDL_SetRenderDrawColor(Renderer, 0, 0, 255, 255);
+				//SDL_RenderDrawPoint(Renderer, s->texture.x, s->texture.y);
+				//SDL_RenderDrawPoint(Renderer, s->Center.x, s->Center.y);
+				////Draws vertices for debugging
+				//for (Vec2D vert : s->vertices)
+				//{
+				//	SDL_SetRenderDrawColor(Renderer, 0, 0, 255, 255);
+				//	SDL_RenderDrawPoint(Renderer, vert.x, vert.y);
+				//}
 			}
 			SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
 			SDL_RenderPresent(Renderer);
 			for (int i = 0; i < Sprites.size() - 1; ++i)
 			{
-				if (Sprites[i]->CollidesWith(Sprites[i + 1]))
+				for (int j = i + 1; j < Sprites.size(); ++j)
 				{
-					std::cout << "Two things collided!" << std::endl;
-				}
-				else
-				{
-					std::cout << "No collision" << std::endl;
+					Sprites[i]->CollidesWith(Sprites[j]);
+					Sprites[j]->CollidesWith(Sprites[i]);
 				}
 			}
 		}
@@ -267,4 +273,6 @@ Sprite* Scene::GetPlayerSprite()
 			return Player;
 		}
 	}
+	std::cout << "There is no Player Sprite assigned" << std::endl;
+	return nullptr;
 }

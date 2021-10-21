@@ -31,6 +31,18 @@ void Laser::PlayerInput(SDL_Event Event, SDL_Renderer* renderer)
 
 void Laser::DefaultBehavior()
 {
-	SetSpeed(50.00);
+	SetSpeed(20.00);
 	MoveSprite();
+}
+
+void Laser::CollisionBehavior(Sprite* OtherSprite)
+{
+	if(OtherSprite == Owner){ return; }
+	Hide();
+	DealDamage(OtherSprite, 1);
+}
+
+void Laser::DealDamage(Sprite* OtherSprite, double Amount)
+{
+	OtherSprite->TakeDamage(Amount);
 }

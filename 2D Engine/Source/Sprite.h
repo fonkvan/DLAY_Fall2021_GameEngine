@@ -29,7 +29,9 @@ class Sprite
 		std::vector<Vec2D> vertices;
 		bool bCollisionEnabled;
 		bool bPlayer = false;
+		bool bDraw = true;
 		double ConvertToDegrees(double Radians);
+		double Health;
 	private:
 		void VectorProjection(double Speed); //convert into individual Vector (Vec2D) components x and y
 		double ConvertToRadians(double Degrees);
@@ -41,6 +43,8 @@ class Sprite
 		virtual void Update(SDL_Renderer* renderer);
 		virtual void PlayerInput(SDL_Event Event, SDL_Renderer* renderer); //If class not meant to ever be a player, just return
 		virtual void DefaultBehavior(); //Standard behavior if not controlled by player, possibly AI behavior
+		virtual void CollisionBehavior(Sprite* OtherSprite);
+		virtual void DealDamage(Sprite* OtherSprite, double Amount);
 		void Hide();
 		void Show();
 		void SetSpeed(double Speed);
@@ -60,5 +64,6 @@ class Sprite
 		std::stack<Vec2D> GetNormals();
 		void SetPlayerStatus(bool IsPlayer);
 		Vec2D GetPosition(); //returns Center position
+		void TakeDamage(double Amount);
 		friend class Scene;
 };

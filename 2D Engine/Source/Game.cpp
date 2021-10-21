@@ -16,8 +16,3 @@ void Game::InitGame(const char* GameName)
 {
 	this->GameName = GameName;
 }
-
-void Game::RunGame()
-{
-	GameScene->Start(GameName, Sprites, ImagePaths, InitialPositions);
-}

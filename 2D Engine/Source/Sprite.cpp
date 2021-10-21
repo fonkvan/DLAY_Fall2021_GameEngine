@@ -21,6 +21,7 @@ Sprite::Sprite()
 	Scene = nullptr;
 	BoundAction = 0;
 	bCollisionEnabled = true;
+	Health = 0;
 }
 
 void Sprite::SetScale(double s)
@@ -34,7 +35,6 @@ void Sprite::VectorProjection(double Speed)
 	Velocity.y = Speed * sin(MoveAngle) + Acceleration.y;
 	this->Speed = sqrt((Velocity.x * Velocity.x) + (Velocity.y * Velocity.y));
 	MoveAngle = atan2(Velocity.y, Velocity.x);
-	//ImageAngle = MoveAngle + M_PI/2;
 }
 
 SDL_Texture* Sprite::SetImage(SDL_Renderer* renderer, std::string ImagePath, Vec2D InitPosition)
@@ -78,15 +78,19 @@ void Sprite::Draw(SDL_Renderer* renderer)
 void Sprite::Update(SDL_Renderer* renderer){ return; } //Update, in implemenatation, should only be updating location, rotation, speed etc.
 void Sprite::PlayerInput(SDL_Event Event, SDL_Renderer* renderer){ return; }
 void Sprite::DefaultBehavior(){ return; }
+void Sprite::CollisionBehavior(Sprite* OtherSprite){ return; }
+void Sprite::DealDamage(Sprite* OtherSprite, double Amount){ return; }
 
 void Sprite::Hide()
 {
-
+	bDraw = false;
+	SetCollisionEnabled(false);
 }
 
 void Sprite::Show()
 {
-
+	bDraw = true;
+	SetCollisionEnabled(true);
 }
 
 void Sprite::SetSpeed(double Speed)
@@ -122,11 +126,16 @@ void Sprite::CheckBounds()
 
 bool Sprite::CollidesWith(Sprite* OtherSprite)
 {
+	if (!bCollisionEnabled || !OtherSprite->bCollisionEnabled)
+	{
+		return false;
+	}
 	std::stack<Vec2D> P1Normals = GetNormals();
 	std::stack<Vec2D> P2Normals = OtherSprite->GetNormals();
 	if(!SeparateAxisTheorem(P1Normals, OtherSprite)){ return false; }
 	if(!SeparateAxisTheorem(P2Normals, OtherSprite)){ return false; }
 	//if we got through all normals we can prove that there is a collision
+	CollisionBehavior(OtherSprite);
 	return true;
 }
 
@@ -158,6 +167,10 @@ double Sprite::ConvertToDegrees(double Radians)
 
 void Sprite::SetVertices()
 {
+	while (!vertices.empty())
+	{
+		vertices.pop_back();
+	}
 	Vec2D vert1{(double)texture.x, (double)texture.y};
 	Vec2D vert2{(double)texture.x + (double)texture.w, (double)texture.y};
 	Vec2D vert3{(double)texture.x, (double)texture.y + (double)texture.h};
@@ -283,4 +296,9 @@ void Sprite::SetPlayerStatus(bool IsPlayer)
 Vec2D Sprite::GetPosition()
 {
 	return Center;
+}
+
+void Sprite::TakeDamage(double Amount)
+{
+	Health -= Amount;
 }

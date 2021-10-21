@@ -7,4 +7,3 @@ class SpaceGame : public Game
 		SpaceGame(Scene* GameScene);
 		virtual void InitGame(const char* GameName) override;
 };
-

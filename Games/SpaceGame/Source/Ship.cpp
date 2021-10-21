@@ -4,7 +4,6 @@
 #include "Ship.h"
 #include "..\..\2D Engine\Source\Scene.h"
 
-#define OUT
 Ship::Ship()
 {
 	Image = nullptr;
@@ -22,6 +21,7 @@ Ship::Ship()
 	Scene = nullptr;
 	BoundAction = 0;
 	bCollisionEnabled = true;
+	Health = 3.00;
 }
 
 void Ship::Update(SDL_Renderer* renderer)
@@ -29,6 +29,22 @@ void Ship::Update(SDL_Renderer* renderer)
 	if(!bPlayer)
 	{
 		DefaultBehavior();
+	}
+	if (bPlayer)
+	{
+		if (!bCanFire)
+		{
+			--CountTilFire;
+		}
+		if (CountTilFire <= 0)
+		{
+			bCanFire = true;
+			CountTilFire = FireFrames;
+		}
+	}
+	if (Health <= 0)
+	{
+		Die();
 	}
 	//Update location, rotation, etc
 	return;
@@ -42,39 +58,44 @@ void Ship::PlayerInput(SDL_Event Event, SDL_Renderer* renderer)
 	{
 		if (Event.button.button == SDL_BUTTON_LEFT)
 		{
-			Fire();
+			if (bDraw && bCanFire)
+			{
+				Fire();
+			}
 		}
 	}
 	if (Event.type == SDL_KEYDOWN)
 	{
 		if (Event.key.keysym.sym == SDLK_w)
 		{
-			//MoveAngle = -M_PI/2;
+			/*MoveAngle = -M_PI/2;
 			SetSpeed(3.00);
-			MoveSprite();
+			MoveSprite();*/
 		}
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		if (Event.key.keysym.sym == SDLK_a)
 		{
-		/*	MoveAngle = M_PI;
-			SetSpeed(12.00);
-			MoveSprite();*/
-			IA = ConvertToDegrees(ImageAngle);
+			MoveAngle = M_PI;
+			SetSpeed(3.00);
+			MoveSprite();
+			/*IA = ConvertToDegrees(ImageAngle);
 			MA = ConvertToDegrees(MoveAngle);
 			SetImageAngle(IA - 1);
 			SetMoveAngle(MA - 1);
-			UpdateVertices();
+			UpdateVertices();*/
 		}
 		if (Event.key.keysym.sym == SDLK_d)
 		{
-			/*MoveAngle = 0;
-			SetSpeed(12.00);
-			MoveSprite();*/
-			IA = ConvertToDegrees(ImageAngle);
+			//Side-to-side movement
+			MoveAngle = 0;
+			SetSpeed(3.00);
+			MoveSprite();
+			//For rotation mechanics if wanted
+			/*IA = ConvertToDegrees(ImageAngle);
 			MA = ConvertToDegrees(MoveAngle);
 			SetImageAngle(IA + 1);
 			SetMoveAngle(MA + 1);
-			UpdateVertices();
+			UpdateVertices();*/
 		}
 	}
 	if (Event.type == SDL_KEYUP)
@@ -101,7 +122,39 @@ void Ship::DefaultBehavior()
 	}
 }
 
+void Ship::CollisionBehavior(Sprite* OtherSprite)
+{
+	return;
+}
+
+void Ship::DealDamage(Sprite* OtherSprite, double Amount)
+{
+	return;
+}
+
 void Ship::Fire()
 {
-	
+	bCanFire = false;
+	Laser* l;
+	++count;
+	if (count >= Lasers.size())
+	{
+		count = 0;
+	}
+	l = Lasers[count];
+	//l->MoveAngle = MoveAngle; // Use this for rotational mechanics, ie ship can rotate
+	l->MoveAngle = -M_PI/2; //Use this for side-to-side movement only
+	l->ImageAngle = ImageAngle;
+	l->Center.x = Center.x;
+	l->Center.y = Center.y;
+	l->texture.x = Center.x - D.x;
+	l->texture.y = Center.y - D.y;
+	l->SetVertices();
+	l->Speed = 20;
+	l->Show();
+}
+
+void Ship::Die()
+{
+	Hide();
 }

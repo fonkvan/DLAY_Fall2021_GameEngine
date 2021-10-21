@@ -18,6 +18,5 @@ class Game
 		Game();
 		Game(Scene* GameScene);
 		virtual void InitGame(const char* GameName);
-		void RunGame();
 };
 
