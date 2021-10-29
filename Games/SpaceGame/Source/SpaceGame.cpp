@@ -1,7 +1,7 @@
 #include "SpaceGame.h"
 #include "Ship.h"
 #include "Laser.h"
-#include "..\..\2D Engine\Source\Scene.h"
+#include "..\..\..\2D Engine\Source\Scene.h"
 
 SpaceGame::SpaceGame(Scene* GameScene)
 {

@@ -1,5 +1,3 @@
-#include <string>
-#include <vector>
 #include "Game.h"
 #include "SDL.h"
 #include "Scene.h"

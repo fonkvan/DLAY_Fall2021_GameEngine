@@ -13,12 +13,12 @@ Scene::Scene()
 	Size.x = 700;
 	Size.y = 700;
 	Framerate = 60;
-	MouseButton = 0;
+	//MouseButton = 0;
 	CurrentTime = std::chrono::system_clock::now();
 	LastTime = CurrentTime;
 	DeltaTime = CurrentTime - LastTime;
-	MousePos.x = 0;
-	MousePos.y = 0;
+	//MousePos.x = 0;
+	//MousePos.y = 0;
 	RefreshSeconds = 1.00 / Framerate;
 }
 
@@ -96,6 +96,7 @@ void Scene::Tick()
 					s->Update(Renderer);
 					SDL_RenderCopyEx(Renderer, s->Image, NULL, &s->texture, s->ConvertToDegrees(s->ImageAngle), NULL, SDL_FLIP_NONE);
 				}
+				//DEBUG COLLISION BOXES
 				//SDL_SetRenderDrawColor(Renderer, 0, 0, 255, 255);
 				//SDL_RenderDrawPoint(Renderer, s->texture.x, s->texture.y);
 				//SDL_RenderDrawPoint(Renderer, s->Center.x, s->Center.y);
@@ -125,10 +126,10 @@ void Scene::Tick()
 	return;
 }
 
-void Scene::Pause()
-{
-	//Will maybe do something?
-}
+//void Scene::Pause()
+//{
+//	//Will maybe do something?
+//}
 
 void Scene::Clear()
 {
@@ -145,14 +146,14 @@ void Scene::ShowCursor()
 	SDL_ShowCursor(SDL_ENABLE);
 }
 
-Vec2D Scene::GetMousePos()
-{
-	int x, y; // Out parameters
-	MouseButton = SDL_GetMouseState(OUT &x, OUT &y);
-	MousePos.x = x;
-	MousePos.y = y;
-	return MousePos;
-}
+//Vec2D Scene::GetMousePos()
+//{
+//	int x, y; // Out parameters
+//	MouseButton = SDL_GetMouseState(OUT &x, OUT &y);
+//	MousePos.x = x;
+//	MousePos.y = y;
+//	return MousePos;
+//}
 
 void Scene::Hide()
 {
@@ -173,22 +174,22 @@ void Scene::EventHandler(SDL_Event Event, bool& bPlay, bool& bPaused)
 		if (Event.key.keysym.sym == SDLK_p)
 		{
 			bPaused = true;
-			std::cout << "P pressed. Pausing..." << std::endl;
-			Pause();
+			//std::cout << "P pressed. Pausing..." << std::endl;
+			//Pause();
 		}
 		if (Event.key.keysym.sym == SDLK_c)
 		{
-			std::cout << "Clearing renderer" << std::endl;
+			//std::cout << "Clearing renderer" << std::endl;
 			Clear();
 		}
 		if (Event.key.keysym.sym == SDLK_q || Event.key.keysym.sym == SDLK_ESCAPE)
 		{
 			bPlay = false;
-			std::cout << "Quit button pressed. Quitting engine." << std::endl;
+			//std::cout << "Quit button pressed. Quitting engine." << std::endl;
 		}
 		if (Event.key.keysym.sym == SDLK_t)
 		{
-			std::cout << "T pressed. Changing mouse visibility" << std::endl;
+			//std::cout << "T pressed. Changing mouse visibility" << std::endl;
 			int MouseVisibility = SDL_ShowCursor(SDL_QUERY);
 			if (MouseVisibility)
 			{
@@ -201,7 +202,7 @@ void Scene::EventHandler(SDL_Event Event, bool& bPlay, bool& bPaused)
 		}
 		if (Event.key.keysym.sym == SDLK_h)
 		{
-			std::cout << "Changing window visibility" << std::endl;
+			//std::cout << "Changing window visibility" << std::endl;
 			if (bWindowVisible)
 			{
 				bWindowVisible = false;
@@ -237,7 +238,7 @@ void Scene::PausedEventHandler(bool& bPlay, bool& bPaused)
 		if (Event.key.keysym.sym == SDLK_p)
 		{
 			bPaused = false;
-			std::cout << "P pressed. Unpausing..." << std::endl;
+			//std::cout << "P pressed. Unpausing..." << std::endl;
 		}
 		if (Event.key.keysym.sym == SDLK_q || Event.key.keysym.sym == SDLK_ESCAPE)
 		{

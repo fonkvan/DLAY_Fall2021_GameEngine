@@ -1,5 +1,5 @@
 #pragma once
-#include "Sprite.h"
+#include "..\..\..\2D Engine\Source\Sprite.h"
 
 class Laser : public Sprite
 {

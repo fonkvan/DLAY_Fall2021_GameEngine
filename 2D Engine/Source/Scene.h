@@ -17,8 +17,8 @@ class Scene
 		Vec2D Size;
 		std::vector<Sprite*> Sprites;
 		int Framerate;
-		Uint32 MouseButton;
-		Vec2D MousePos;
+		//Uint32 MouseButton;
+		//Vec2D MousePos;
 		std::chrono::system_clock::time_point CurrentTime;
 		std::chrono::system_clock::time_point LastTime;
 		std::chrono::duration<double> DeltaTime;
@@ -29,11 +29,11 @@ class Scene
 		void Start(const char* GameName, std::vector<Sprite*> Sprites, std::vector<std::string> ImagePaths, std::vector<Vec2D> InitialPositions);
 		void End();
 		void Tick();
-		void Pause();
+//		void Pause();
 		void Clear();
 		void HideCursor();
 		void ShowCursor();
-		Vec2D GetMousePos();
+//		Vec2D GetMousePos();
 		void Hide();
 		void Show();
 		void EventHandler(SDL_Event Event, bool& bPlay, bool& bPaused);

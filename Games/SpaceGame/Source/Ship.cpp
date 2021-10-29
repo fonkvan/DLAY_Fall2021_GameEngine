@@ -2,7 +2,7 @@
 #include <vector>
 #include "Laser.h"
 #include "Ship.h"
-#include "..\..\2D Engine\Source\Scene.h"
+#include "..\..\..\2D Engine\Source\Scene.h"
 
 Ship::Ship()
 {

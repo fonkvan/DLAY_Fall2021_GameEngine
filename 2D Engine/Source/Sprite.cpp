@@ -62,9 +62,6 @@ SDL_Texture* Sprite::SetImage(SDL_Renderer* renderer, std::string ImagePath, Vec
 		Center.y = Position.y + (texture.h / 2.00);
 		D.x = Center.x - texture.x;
 		D.y = Center.y - texture.y;
-		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-		SDL_RenderDrawPoint(renderer, Center.x, Center.y);
-		SDL_RenderDrawPoint(renderer, texture.x, texture.y);
 		return Image;
 	}
 }
